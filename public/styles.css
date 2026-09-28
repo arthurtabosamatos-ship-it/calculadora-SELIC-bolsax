@@ -1,0 +1,204 @@
+:root {
+  --fundo: #E6EEE8;
+  --superficie: #F6F9F6;
+  --tinta: #16263A;
+  --tinta-suave: #4C5D6E;
+  --linha: #C6D3CA;
+  --selic: #1F6F78;
+  --acao: #C77D12;
+  --erro: #A8321E;
+  --display: 'Bricolage Grotesque', 'Segoe UI', system-ui, sans-serif;
+  --texto: 'Manrope', 'Segoe UI', system-ui, sans-serif;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fundo: #102027;
+    --superficie: #172B33;
+    --tinta: #E4ECE6;
+    --tinta-suave: #A3B4AC;
+    --linha: #2B434C;
+    --selic: #5CB8C0;
+    --acao: #E9A23B;
+    --erro: #F07A62;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--fundo);
+  color: var(--tinta);
+  font: 400 1rem/1.55 var(--texto);
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+}
+
+.topo, .grade, .rodape {
+  max-width: 1120px;
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 4vw, 2rem);
+}
+
+.topo { padding-block: clamp(2rem, 6vw, 4rem) 1.5rem; }
+
+h1 {
+  font: 800 clamp(2.6rem, 8vw, 5.2rem)/0.95 var(--display);
+  letter-spacing: -0.035em;
+  margin: 0 0 0.75rem;
+}
+
+.subtitulo { margin: 0; max-width: 34rem; color: var(--tinta-suave); font-size: 1.1rem; }
+
+.grade {
+  display: grid;
+  grid-template-columns: minmax(260px, 320px) 1fr;
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  align-items: start;
+  padding-bottom: 3rem;
+}
+
+/* ---------- Formulário ---------- */
+.painel {
+  position: sticky;
+  top: 1rem;
+  display: grid;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  background: var(--superficie);
+  border: 1px solid var(--linha);
+  border-radius: 14px;
+}
+
+.campo { display: grid; gap: 0.4rem; margin: 0; padding: 0; border: 0; min-width: 0; }
+.campo > label, .campo > legend { font-weight: 700; font-size: 0.95rem; padding: 0; margin-bottom: 0.4rem; }
+.campo small { color: var(--tinta-suave); font-size: 0.82rem; }
+
+input[type="text"], input:not([type]), .moeda input, #ticker {
+  width: 100%;
+  font: 600 1.05rem var(--texto);
+  color: var(--tinta);
+  background: transparent;
+  border: 1.5px solid var(--linha);
+  border-radius: 8px;
+  padding: 0.65rem 0.75rem;
+}
+
+#ticker { text-transform: uppercase; letter-spacing: 0.02em; }
+
+.moeda { position: relative; }
+.moeda span {
+  position: absolute; left: 0.8rem; top: 50%; transform: translateY(-50%);
+  color: var(--tinta-suave); font-weight: 600; pointer-events: none;
+}
+.moeda input { padding-left: 2.4rem; text-align: right; }
+
+input:focus-visible, button:focus-visible, .segmentos input:focus-visible + span, .opcao input:focus-visible {
+  outline: 3px solid var(--selic);
+  outline-offset: 2px;
+}
+
+.segmentos {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border: 1.5px solid var(--linha);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.segmentos label { position: relative; }
+.segmentos input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.segmentos span {
+  display: block; text-align: center; padding: 0.6rem 0.2rem;
+  font-weight: 600; font-size: 0.92rem; white-space: nowrap; cursor: pointer;
+}
+.segmentos label + label span { border-left: 1.5px solid var(--linha); }
+.segmentos input:checked + span { background: var(--tinta); color: var(--superficie); }
+
+.opcao { display: flex; gap: 0.6rem; align-items: center; font-weight: 500; cursor: pointer; }
+.opcao input { width: 1.1rem; height: 1.1rem; accent-color: var(--selic); }
+
+button {
+  font: 700 1.05rem var(--display);
+  color: var(--superficie);
+  background: var(--tinta);
+  border: 0;
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  cursor: pointer;
+}
+button:hover { filter: brightness(1.15); }
+button:disabled { opacity: 0.6; cursor: progress; }
+
+/* ---------- Resultado ---------- */
+.resultado { min-width: 0; }
+
+.estado { color: var(--tinta-suave); font-size: 1.05rem; padding-top: 0.5rem; }
+.estado.erro { color: var(--erro); font-weight: 600; }
+
+.veredito {
+  font: 700 clamp(1.5rem, 3.6vw, 2.35rem)/1.12 var(--display);
+  letter-spacing: -0.02em;
+  margin: 0 0 1.5rem;
+  max-width: 24ch;
+}
+
+/* O duelo: duas barras disputando o mesmo trilho, proporcionais ao valor líquido final. */
+.duelo {
+  display: flex;
+  height: 3.25rem;
+  gap: 4px;
+  margin-bottom: 1rem;
+}
+.barra {
+  flex-basis: 50%;
+  transition: flex-basis 700ms cubic-bezier(.2,.8,.2,1);
+}
+.barra.selic { background: var(--selic); border-radius: 10px 0 0 10px; }
+.barra.acao  { background: var(--acao);  border-radius: 0 10px 10px 0; }
+
+.lados { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem; }
+.lado h2 { font: 700 1rem var(--texto); margin: 0; }
+.lado.selic h2 { color: var(--selic); }
+.lado.acao h2 { color: var(--acao); }
+.lado.acao { text-align: right; }
+.liquido { font: 800 clamp(1.4rem, 3.4vw, 2.2rem)/1.1 var(--display); margin: 0.2rem 0 0; letter-spacing: -0.02em; }
+.rotulo { margin: 0.1rem 0 0; color: var(--tinta-suave); font-size: 0.85rem; }
+
+.tabela-envoltorio { overflow-x: auto; margin-bottom: 2rem; }
+.tabela { width: 100%; border-collapse: collapse; min-width: 320px; }
+.tabela small { display: block; font-weight: 500; font-size: 0.8rem; color: var(--tinta-suave); }
+.tabela th, .tabela td { padding: 0.7rem 0.6rem; border-bottom: 1px solid var(--linha); }
+.tabela thead th { font-weight: 700; font-size: 0.9rem; text-align: right; }
+.tabela tbody th { text-align: left; font-weight: 500; color: var(--tinta-suave); }
+.tabela td { text-align: right; font-weight: 600; }
+.tabela td.centro { text-align: center; }
+.c-selic { color: var(--selic); }
+.c-acao { color: var(--acao); }
+.tabela .destaque th, .tabela .destaque td { color: var(--tinta); font-weight: 800; font-size: 1.08rem; }
+.negativo { color: var(--erro) !important; }
+
+.grafico { margin: 0 0 1.5rem; }
+.grafico figcaption { font-weight: 700; margin-bottom: 0.75rem; }
+.grafico-area { position: relative; height: clamp(240px, 38vw, 360px); }
+
+.notas { color: var(--tinta-suave); font-size: 0.85rem; max-width: 70ch; }
+
+.rodape {
+  color: var(--tinta-suave);
+  font-size: 0.82rem;
+  padding-block: 1.5rem 2.5rem;
+  border-top: 1px solid var(--linha);
+}
+
+@media (max-width: 780px) {
+  .grade { grid-template-columns: 1fr; }
+  .painel { position: static; }
+  .tabela th, .tabela td { padding: 0.6rem 0.35rem; font-size: 0.9rem; }
+  .tabela .destaque th, .tabela .destaque td { font-size: 0.95rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .barra { transition: none; }
+}

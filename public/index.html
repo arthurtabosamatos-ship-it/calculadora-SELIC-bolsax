@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Selic × Ação — Comparador de Rendimento</title>
+  <meta name="description" content="Compare o rendimento líquido da taxa Selic com o de uma ação da B3, com aplicação inicial e aportes mensais." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230f766e'/><path d='M6 22l6-7 5 4 9-10' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <h1>Selic <span class="x">×</span> Ação</h1>
+      <p class="sub">Quanto teria rendido o mesmo dinheiro, com os mesmos aportes, na Selic ou numa ação da B3?</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <form id="form" class="card form" autocomplete="off">
+      <div class="field field-ticker">
+        <label for="ticker">Ação</label>
+        <input id="ticker" name="ticker" list="tickers" value="PETR4" placeholder="Ex.: PETR4" spellcheck="false" required />
+        <datalist id="tickers"></datalist>
+        <small class="hint" id="stockName">&nbsp;</small>
+      </div>
+
+      <fieldset class="field">
+        <legend>Janela</legend>
+        <div class="seg" role="radiogroup" id="years">
+          <label><input type="radio" name="years" value="1" /><span>1 ano</span></label>
+          <label><input type="radio" name="years" value="2" /><span>2 anos</span></label>
+          <label><input type="radio" name="years" value="5" checked /><span>5 anos</span></label>
+          <label><input type="radio" name="years" value="10" /><span>10 anos</span></label>
+        </div>
+      </fieldset>
+
+      <div class="field">
+        <label for="initial">Aplicação inicial</label>
+        <div class="money"><span>R$</span><input id="initial" name="initial" inputmode="decimal" value="10.000,00" /></div>
+      </div>
+
+      <div class="field">
+        <label for="monthly">Aporte mensal</label>
+        <div class="money"><span>R$</span><input id="monthly" name="monthly" inputmode="decimal" value="500,00" /></div>
+      </div>
+
+      <div class="toggles">
+        <label class="check"><input type="checkbox" id="applyTax" checked /> Descontar Imposto de Renda</label>
+        <label class="check"><input type="checkbox" id="useAdjusted" checked /> Reinvestir proventos (preço ajustado)</label>
+      </div>
+
+      <button type="submit" class="btn" id="submit">Comparar</button>
+    </form>
+
+    <div id="status" class="status" role="status" aria-live="polite"></div>
+
+    <section id="results" hidden>
+      <div class="verdict card" id="verdict"></div>
+
+      <div class="grid2">
+        <article class="card result selic">
+          <header><span class="dot"></span><h2>Selic</h2><small>Tesouro Selic / 100% da Selic</small></header>
+          <dl id="selicStats"></dl>
+        </article>
+        <article class="card result stock">
+          <header><span class="dot"></span><h2 id="stockTitle">Ação</h2><small id="stockSub">&nbsp;</small></header>
+          <dl id="stockStats"></dl>
+        </article>
+      </div>
+
+      <div class="card chart-card">
+        <div class="chart-head">
+          <h3>Evolução do patrimônio (bruto)</h3>
+          <small id="period"></small>
+        </div>
+        <div class="chart-box"><canvas id="chart" aria-label="Gráfico de evolução do patrimônio"></canvas></div>
+      </div>
+    </section>
+
+    <details class="card notes">
+      <summary>Premissas e fontes</summary>
+      <ul>
+        <li><b>Selic:</b> taxa acumulada no mês (BCB/SGS, série 4390), equivalente a um título Tesouro Selic ou aplicação a 100% da Selic. IR pela tabela regressiva (22,5% até 180 dias → 15% acima de 720 dias), calculado aporte a aporte. Taxa de custódia e IOF não considerados.</li>
+        <li><b>Ação:</b> cotações mensais de fechamento (Yahoo Finance). Com “reinvestir proventos”, usa o preço ajustado, que incorpora dividendos e JCP como se fossem reinvestidos. IR de 15% sobre o ganho líquido na venda total ao final do período; custos de corretagem e a isenção de vendas até R$ 20 mil/mês não são considerados.</li>
+        <li><b>Calendário:</b> aplicação inicial no fechamento do primeiro mês da janela e um aporte por mês a partir do mês seguinte; avaliação no último mês com dados disponíveis nas duas fontes.</li>
+        <li>Rentabilidade passada não garante rentabilidade futura. Ferramenta educativa, não constitui recomendação de investimento.</li>
+      </ul>
+    </details>
+  </main>
+
+  <footer class="wrap foot">Dados: Banco Central do Brasil (SGS) e Yahoo Finance.</footer>
+
+  <script src="/vendor/chart.umd.min.js" defer></script>
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>
